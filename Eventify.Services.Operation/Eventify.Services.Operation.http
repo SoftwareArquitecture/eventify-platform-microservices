@@ -1,0 +1,6 @@
+@Eventify.Services.Operation_HostAddress = http://localhost:5079
+
+GET {{Eventify.Services.Operation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

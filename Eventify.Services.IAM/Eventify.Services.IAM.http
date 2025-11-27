@@ -1,0 +1,6 @@
+@Eventify.Services.IAM_HostAddress = http://localhost:5012
+
+GET {{Eventify.Services.IAM_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
