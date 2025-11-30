@@ -19,10 +19,8 @@ public class ProfileCommandService(
             await unitOfWork.CompleteAsync();
             return profile;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log the exception (not implemented here)
-            // Optionally, rethrow or handle the exception as needed
             return null;
         }
     }

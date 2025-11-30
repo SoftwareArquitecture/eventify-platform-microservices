@@ -16,7 +16,7 @@ public class QuoteRepository(AppDbContext context) : BaseRepository<Quote>(conte
             .ToListAsync();
     }
 
-    public new async Task<Quote?> FindByIdAsync(QuoteId quoteId)
+    public async Task<Quote?> FindByIdAsync(QuoteId quoteId)
     {
         return await Context.Set<Quote>().FirstOrDefaultAsync(quote => quote.Id == quoteId);
     }

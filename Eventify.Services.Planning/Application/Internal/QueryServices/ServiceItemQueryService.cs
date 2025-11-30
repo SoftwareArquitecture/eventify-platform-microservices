@@ -6,7 +6,7 @@ using Eventify.Shared.Domain.Repositories;
 
 namespace Eventify.Services.Planning.Application.Internal.QueryServices;
 
-public class ServiceItemQueryService(IServiceItemRepository serviceItemRepository, IUnitOfWork unitOfWork)
+public class ServiceItemQueryService(IServiceItemRepository serviceItemRepository)
     : IServiceItemQueryService
 {
     public async Task<ServiceItem?> Handle(GetServiceItemByIdQuery query)
