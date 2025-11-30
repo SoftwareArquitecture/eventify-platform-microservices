@@ -6,6 +6,8 @@ using Eventify.Services.IAM.Domain.Services;
 using Eventify.Services.IAM.Infrastructure.Hashing.BCrypt.Services;
 using Eventify.Services.IAM.Infrastructure.Persistence.EFC.Configuration;
 using Eventify.Services.IAM.Infrastructure.Persistence.EFC.Repositories;
+using Eventify.Services.IAM.Infrastructure.Pipeline.Middleware.Extensions;
+using Eventify.Services.IAM.Infrastructure.Tokens.JWT.Configuration;
 using Eventify.Services.IAM.Infrastructure.Tokens.JWT.Services;
 using Eventify.Services.IAM.Interfaces.ACL;
 using Eventify.Services.IAM.Interfaces.ACL.Services;
@@ -16,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<IamDbContext>(options =>
@@ -38,6 +42,17 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Eventify.Services.IAM", Version = "v1" });
     c.EnableAnnotations();
+});
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.SetIsOriginAllowed(_ => true)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .WithExposedHeaders("Content-Disposition", "Authorization"));
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -63,7 +78,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
+app.UseRequestAuthorization();
 app.UseAuthorization();
 app.MapControllers();
 

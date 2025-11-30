@@ -40,6 +40,17 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.SetIsOriginAllowed(_ => true)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .WithExposedHeaders("Content-Disposition", "Authorization"));
+});
+
 // Repositories
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
@@ -69,6 +80,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
