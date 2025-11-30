@@ -5,10 +5,20 @@ namespace Eventify.Services.Planning.Domain.Model.Aggregates;
 
 public class Quote
 {
+    protected Quote()
+    {
+        Id = null!;
+        Title = string.Empty;
+        Location = string.Empty;
+        OrganizerId = null!;
+        HostId = null!;
+    }
+
     public Quote(string title, ESocialEventType eventType, int guestQuantity, string location, double totalPrice,
         EQuoteStatus status,
         DateTime eventDate, OrganizerId organizerId, HostId hostId)
     {
+        Id = new QuoteId();
         Title = title;
         EventType = eventType;
         GuestQuantity = guestQuantity;

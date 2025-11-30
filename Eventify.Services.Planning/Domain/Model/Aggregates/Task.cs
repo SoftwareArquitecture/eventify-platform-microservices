@@ -7,6 +7,11 @@ public class TaskItem
 {
     protected TaskItem()
     {
+        Id = null!;
+        Title = null!;
+        Description = null!;
+        ColumnId = null!;
+        Order = null!;
     }
 
     public TaskItem(CreateTaskCommand command)

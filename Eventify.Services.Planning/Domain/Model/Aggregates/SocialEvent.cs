@@ -7,6 +7,11 @@ public class SocialEvent
 {
     protected SocialEvent()
     {
+        Id = null!;
+        Title = null!;
+        EventDate = null!;
+        NameCustomer = null!;
+        Place = null!;
     }
 
 

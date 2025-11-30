@@ -7,6 +7,9 @@ public class ServiceItem
 {
     public ServiceItem()
     {
+        Id = null!;
+        Description = null!;
+        QuoteId = null!;
     }
 
     public ServiceItem(CreateServiceItemCommand command)
