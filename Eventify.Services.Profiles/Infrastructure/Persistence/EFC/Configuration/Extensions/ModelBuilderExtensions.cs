@@ -58,8 +58,8 @@ public static class ModelBuilderExtensions
             b.Property(bi => bi.Text).HasColumnName("Biography");
         });
         var RoleConverter = new ValueConverter<TypeProfile, string>(
-            t => t.ToString(),
-            t => Enum.Parse<TypeProfile>(t));
+            t => t.ToString().ToLower(),
+            t => Enum.Parse<TypeProfile>(t, true));
         builder.Entity<Profile>()
             .Property(p => p.Role)
             .HasConversion(RoleConverter)
