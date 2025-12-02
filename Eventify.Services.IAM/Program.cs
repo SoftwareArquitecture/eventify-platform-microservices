@@ -1,3 +1,4 @@
+using Eventify.Services.IAM.Application.ACL;
 using Eventify.Services.IAM.Application.Internal.CommandServices;
 using Eventify.Services.IAM.Application.Internal.OutboundServices;
 using Eventify.Services.IAM.Application.Internal.QueryServices;
@@ -49,10 +50,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
         policy.SetIsOriginAllowed(_ => true)
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials()
-              .WithExposedHeaders("Content-Disposition", "Authorization"));
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithExposedHeaders("Content-Disposition", "Authorization"));
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -62,6 +63,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// HttpClient for Profiles service communication
+builder.Services.AddHttpClient<IProfilesContextFacade, ProfilesContextFacade>();
 
 var app = builder.Build();
 

@@ -1,3 +1,4 @@
+using Eventify.Services.IAM.Application.ACL;
 using Eventify.Services.IAM.Application.Internal.OutboundServices;
 using Eventify.Services.IAM.Domain.Model.Aggregates;
 using Eventify.Services.IAM.Domain.Model.Commands;
@@ -19,7 +20,8 @@ public class UserCommandService(
     IUserRepository userRepository,
     ITokenService tokenService,
     IHashingService hashingService,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IProfilesContextFacade profilesContextFacade)
     : IUserCommandService
 {
     /**
@@ -59,6 +61,21 @@ public class UserCommandService(
         {
             await userRepository.AddAsync(user);
             await unitOfWork.CompleteAsync();
+
+            // Create profile in Profiles service
+            await profilesContextFacade.CreateProfile(
+                command.FirstName,
+                command.LastName,
+                command.Email,
+                command.Street ?? string.Empty,
+                command.Number ?? string.Empty,
+                command.City ?? string.Empty,
+                command.PostalCode ?? string.Empty,
+                command.Country ?? string.Empty,
+                command.PhoneNumber,
+                command.WebSite ?? string.Empty,
+                command.Biography ?? string.Empty,
+                command.Role);
         }
         catch (Exception e)
         {
