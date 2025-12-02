@@ -2,7 +2,6 @@
 using Eventify.Services.Planning.Domain.Model.Queries;
 using Eventify.Services.Planning.Domain.Repositories;
 using Eventify.Services.Planning.Domain.Services;
-using Eventify.Shared.Domain.Repositories;
 
 namespace Eventify.Services.Planning.Application.Internal.QueryServices;
 
