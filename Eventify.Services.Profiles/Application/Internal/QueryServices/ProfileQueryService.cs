@@ -23,4 +23,9 @@ public class ProfileQueryService(
     {
         return await profileRepository.FindByEmailAsync(query.Email);
     }
+
+    public async Task<Profile?> Handle(GetProfileByUserIdQuery query)
+    {
+        return await profileRepository.FindByUserIdAsync(query.UserId);
+    }
 }

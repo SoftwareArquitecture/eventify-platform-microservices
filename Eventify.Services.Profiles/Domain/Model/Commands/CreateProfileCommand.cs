@@ -3,6 +3,7 @@
 namespace Eventify.Services.Profiles.Domain.Model.Commands;
 
 public record CreateProfileCommand(
+    int UserId,
     string FirstName,
     string LastName,
     string Email,

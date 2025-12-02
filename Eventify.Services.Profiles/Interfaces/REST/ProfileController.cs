@@ -31,6 +31,19 @@ public class ProfilesController(
         return Ok(profileResource);
     }
 
+    [HttpGet("user/{userId:int}")]
+    [SwaggerOperation("Get Profile by User Id", "Get a profile by its user identifier.", OperationId = "GetProfileByUserId")]
+    [SwaggerResponse(200, "The profile was found and returned.", typeof(ProfileResource))]
+    [SwaggerResponse(404, "The profile was not found.")]
+    public async Task<IActionResult> GetProfileByUserId(int userId)
+    {
+        var getProfileByUserIdQuery = new GetProfileByUserIdQuery(userId);
+        var profile = await profileQueryService.Handle(getProfileByUserIdQuery);
+        if (profile is null) return NotFound();
+        var profileResource = ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile);
+        return Ok(profileResource);
+    }
+
     [HttpGet("email/{email}")]
     [SwaggerOperation("Get Profile by Email", "Get a profile by its email address.", OperationId = "GetProfileByEmail")]
     [SwaggerResponse(200, "The profile was found and returned.", typeof(ProfileResource))]

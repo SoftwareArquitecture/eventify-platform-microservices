@@ -7,4 +7,5 @@ namespace Eventify.Services.Profiles.Domain.Repositories;
 public interface IProfileRepository : IBaseRepository<Profile>
 {
     Task<Profile?> FindByEmailAsync(EmailAddress email);
+    Task<Profile?> FindByUserIdAsync(int userId);
 }

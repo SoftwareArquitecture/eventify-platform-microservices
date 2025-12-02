@@ -16,9 +16,10 @@ public class Profile
         Role = TypeProfile.Organizer;
     }
 
-    public Profile(string firstName, string lastName, string email, string street, string number, string city,
+    public Profile(int userId, string firstName, string lastName, string email, string street, string number, string city,
         string postalCode, string country, string phoneNumber, string webSite, string biography, TypeProfile role)
     {
+        UserId = userId;
         Name = new PersonName(firstName, lastName);
         Email = new EmailAddress(email);
         Address = new StreetAddress(street, number, city, postalCode, country);
@@ -28,13 +29,14 @@ public class Profile
         Role = role;
     }
 
-    public Profile(CreateProfileCommand command) : this(command.FirstName, command.LastName, command.Email,
+    public Profile(CreateProfileCommand command) : this(command.UserId, command.FirstName, command.LastName, command.Email,
         command.Street, command.Number, command.City, command.PostalCode, command.Country,
         command.PhoneNumber, command.WebSite, command.Biography, command.Role)
     {
     }
 
     public int Id { get; }
+    public int UserId { get; private set; }
     public PersonName Name { get; }
     public EmailAddress Email { get; }
     public StreetAddress Address { get; }
