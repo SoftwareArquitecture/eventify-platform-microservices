@@ -7,9 +7,37 @@ namespace Eventify.Services.IAM.Interfaces.ACL.Services;
 public class IamContextFacade(IUserCommandService userCommandService, IUserQueryService userQueryService)
     : IIamContextFacade
 {
-    public async Task<int> CreateUser(string username, string password)
+    public async Task<int> CreateUser(
+        string username,
+        string password,
+        string firstName,
+        string lastName,
+        string email,
+        string phoneNumber,
+        string role,
+        string? street = null,
+        string? number = null,
+        string? city = null,
+        string? postalCode = null,
+        string? country = null,
+        string? webSite = null,
+        string? biography = null)
     {
-        var signUpCommand = new SignUpCommand(username, password);
+        var signUpCommand = new SignUpCommand(
+            username,
+            password,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            role,
+            street,
+            number,
+            city,
+            postalCode,
+            country,
+            webSite,
+            biography);
         await userCommandService.Handle(signUpCommand);
         var getUserByUsernameQuery = new GetUserByUsernameQuery(username);
         var result = await userQueryService.Handle(getUserByUsernameQuery);
