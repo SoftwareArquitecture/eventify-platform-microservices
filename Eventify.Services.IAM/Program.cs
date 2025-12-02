@@ -69,12 +69,13 @@ builder.Services.AddHttpClient<IProfilesContextFacade, ProfilesContextFacade>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<IamDbContext>();
-    context.Database.EnsureCreated();
-}
+// Database is already created in Aiven, no need to EnsureCreated
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     var context = services.GetRequiredService<IamDbContext>();
+//     context.Database.EnsureCreated();
+// }
 
 app.UseSwagger();
 app.UseSwaggerUI();
