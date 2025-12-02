@@ -64,6 +64,7 @@ public class UserCommandService(
 
             // Create profile in Profiles service
             await profilesContextFacade.CreateProfile(
+                user.Id,
                 command.FirstName,
                 command.LastName,
                 command.Email,

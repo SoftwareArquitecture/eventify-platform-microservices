@@ -12,6 +12,7 @@ public class ProfilesContextFacade(
     : IProfilesContextFacade
 {
     public async Task<int> CreateProfile(
+        int userId,
         string firstName,
         string lastName,
         string email,
@@ -26,6 +27,7 @@ public class ProfilesContextFacade(
         string role)
     {
         var createProfileCommand = new CreateProfileCommand(
+            userId,
             firstName,
             lastName,
             email,

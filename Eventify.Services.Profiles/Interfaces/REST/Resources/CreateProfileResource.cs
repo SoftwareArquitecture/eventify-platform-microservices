@@ -1,6 +1,7 @@
 ﻿namespace Eventify.Services.Profiles.Interfaces.REST.Resources;
 
 public record CreateProfileResource(
+    int UserId,
     string FirstName,
     string LastName,
     string Email,

@@ -5,6 +5,7 @@ namespace Eventify.Services.Profiles.Interfaces.ACL;
 public interface IProfilesContextFacade
 {
     Task<int> CreateProfile(
+        int userId,
         string firstName,
         string lastName,
         string email,
