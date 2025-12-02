@@ -6,17 +6,27 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Cargar configuración de Ocelot
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Configuration
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json",
+                 optional: true,
+                 reloadOnChange: true)
+    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json",
+                 optional: true,
+                 reloadOnChange: true)
+    .AddEnvironmentVariables();
 
-// 2. Configurar Seguridad (JWT)
 var tokenSettings = builder.Configuration.GetSection("TokenSettings");
-// Nota: Usamos un valor por defecto si no está en config para que no falle al compilar,
-// pero en ejecución lo tomará de las variables de entorno.
-var secretKey = tokenSettings["Secret"] ?? "esta_es_una_clave_secreta_muy_larga_para_desarrollo_local_12345";
+
+var secretKey = tokenSettings["Secret"]
+                ?? "esta_es_una_clave_secreta_muy_larga_para_desarrollo_local_12345";
+
 var key = Encoding.UTF8.GetBytes(secretKey);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer("Bearer", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -30,10 +40,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// 3. Agregar Ocelot
-builder.Services.AddOcelot();
+builder.Services.AddOcelot(builder.Configuration);
 
-// 4. Configurar CORS (Para que el frontend no tenga problemas)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -50,7 +58,6 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 5. Activar Ocelot
 await app.UseOcelot();
 
 app.Run();
