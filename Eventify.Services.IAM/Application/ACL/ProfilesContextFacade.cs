@@ -1,7 +1,5 @@
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
 
 namespace Eventify.Services.IAM.Application.ACL;
 
@@ -15,8 +13,8 @@ namespace Eventify.Services.IAM.Application.ACL;
  */
 public class ProfilesContextFacade : IProfilesContextFacade
 {
-    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly HttpClient _httpClient;
 
     public ProfilesContextFacade(HttpClient httpClient, IConfiguration configuration)
     {
@@ -73,10 +71,7 @@ public class ProfilesContextFacade : IProfilesContextFacade
         var jsonDocument = JsonDocument.Parse(responseContent);
 
         // Extract the profile ID from the response
-        if (jsonDocument.RootElement.TryGetProperty("id", out var idElement))
-        {
-            return idElement.GetInt32();
-        }
+        if (jsonDocument.RootElement.TryGetProperty("id", out var idElement)) return idElement.GetInt32();
 
         throw new Exception("Failed to extract profile ID from response");
     }

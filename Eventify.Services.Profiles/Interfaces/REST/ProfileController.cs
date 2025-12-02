@@ -32,7 +32,8 @@ public class ProfilesController(
     }
 
     [HttpGet("user/{userId:int}")]
-    [SwaggerOperation("Get Profile by User Id", "Get a profile by its user identifier.", OperationId = "GetProfileByUserId")]
+    [SwaggerOperation("Get Profile by User Id", "Get a profile by its user identifier.",
+        OperationId = "GetProfileByUserId")]
     [SwaggerResponse(200, "The profile was found and returned.", typeof(ProfileResource))]
     [SwaggerResponse(404, "The profile was not found.")]
     public async Task<IActionResult> GetProfileByUserId(int userId)
