@@ -132,6 +132,63 @@
       "UpstreamPathTemplate": "/api/v1/organizers/{organizerId}/quotes",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer" }
+    },
+
+    {
+      "DownstreamPathTemplate": "/swagger/index.html",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-iam-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-iam",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-iam-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-iam/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/index.html",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-planning-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-planning",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-planning-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-planning/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/index.html",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-profiles-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-profiles",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-profiles-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-profiles/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/index.html",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-operation-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-operation",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [ { "Host": "eventify-operation-service.azurewebsites.net", "Port": 443 } ],
+      "UpstreamPathTemplate": "/swagger-operation/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
   ],
   "GlobalConfiguration": {
