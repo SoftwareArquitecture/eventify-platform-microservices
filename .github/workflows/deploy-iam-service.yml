@@ -33,32 +33,7 @@ jobs:
       run: |
         docker build \
           -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
-          -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }} \
           -f Eventify.Services.IAM/Dockerfile \
           --build-arg SERVICE_NAME=Eventify.Services.IAM \
           .
         docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
-        docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Restart Azure Web App
-      run: |
-        az webapp restart \
-          --name ${{ env.WEBAPP_NAME }} \
-          --resource-group ${{ env.RESOURCE_GROUP }}
-
-    - name: Verify deployment
-      run: |
-        echo "Waiting for service to start..."
-        sleep 30
-        STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.WEBAPP_NAME }}.azurewebsites.net/swagger/index.html)
-        if [ $STATUS -eq 200 ]; then
-          echo "Service deployed successfully"
-        else
-          echo "Service deployment failed (HTTP $STATUS)"
-          exit 1
-        fi
