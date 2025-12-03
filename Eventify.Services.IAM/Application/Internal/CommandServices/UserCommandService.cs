@@ -52,31 +52,40 @@ public class UserCommandService(
      */
     public async Task Handle(SignUpCommand command)
     {
-        if (userRepository.ExistsByUsername(command.Username))
-            throw new Exception($"Username {command.Username} is already taken");
+        // Generate username from email if not provided
+        var username = command.Username ?? command.Email.Split('@')[0];
+
+        // Check if username exists and add suffix if needed
+        var finalUsername = username;
+        var counter = 1;
+        while (userRepository.ExistsByUsername(finalUsername))
+        {
+            finalUsername = $"{username}{counter}";
+            counter++;
+        }
 
         var hashedPassword = hashingService.HashPassword(command.Password);
-        var user = new User(command.Username, hashedPassword);
+        var user = new User(finalUsername, hashedPassword);
         try
         {
             await userRepository.AddAsync(user);
             await unitOfWork.CompleteAsync();
 
-            // Create profile in Profiles service
+            // Create profile in Profiles service with default values
             await profilesContextFacade.CreateProfile(
                 user.Id,
-                command.FirstName,
-                command.LastName,
+                command.FirstName ?? string.Empty,
+                command.LastName ?? string.Empty,
                 command.Email,
                 command.Street ?? string.Empty,
                 command.Number ?? string.Empty,
                 command.City ?? string.Empty,
                 command.PostalCode ?? string.Empty,
                 command.Country ?? string.Empty,
-                command.PhoneNumber,
+                command.PhoneNumber ?? string.Empty,
                 command.WebSite ?? string.Empty,
                 command.Biography ?? string.Empty,
-                command.Role);
+                command.Role ?? "User");
         }
         catch (Exception e)
         {
