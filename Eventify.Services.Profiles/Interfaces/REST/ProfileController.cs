@@ -82,4 +82,18 @@ public class ProfilesController(
         var profileResources = profiles.Select(ProfileResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(profileResources);
     }
+
+    [HttpPut("{profileId:int}")]
+    [SwaggerOperation("Update Profile", "Update an existing profile.", OperationId = "UpdateProfile")]
+    [SwaggerResponse(200, "The profile was updated.", typeof(ProfileResource))]
+    [SwaggerResponse(404, "The profile was not found.")]
+    [SwaggerResponse(400, "The profile could not be updated.")]
+    public async Task<IActionResult> UpdateProfile(int profileId, UpdateProfileResource resource)
+    {
+        var updateProfileCommand = UpdateProfileCommandFromResourceAssembler.ToCommandFromResource(profileId, resource);
+        var profile = await profileCommandService.Handle(updateProfileCommand);
+        if (profile is null) return NotFound();
+        var profileResource = ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile);
+        return Ok(profileResource);
+    }
 }

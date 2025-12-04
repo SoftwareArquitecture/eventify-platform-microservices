@@ -24,4 +24,23 @@ public class ProfileCommandService(
             return null;
         }
     }
+
+    public async Task<Profile?> Handle(UpdateProfileCommand command)
+    {
+        var profile = await profileRepository.FindByIdAsync(command.ProfileId);
+        if (profile == null) return null;
+
+        profile.UpdateProfile(command);
+
+        try
+        {
+            profileRepository.Update(profile);
+            await unitOfWork.CompleteAsync();
+            return profile;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 }

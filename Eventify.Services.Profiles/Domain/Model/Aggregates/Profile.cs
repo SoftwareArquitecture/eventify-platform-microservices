@@ -39,12 +39,12 @@ public class Profile
 
     public int Id { get; }
     public int UserId { get; private set; }
-    public PersonName Name { get; }
-    public EmailAddress Email { get; }
-    public StreetAddress Address { get; }
-    public PhoneNumber PhoneNumber { get; }
-    public WebSiteAddress WebSite { get; }
-    public Biography Biography { get; }
+    public PersonName Name { get; private set; }
+    public EmailAddress Email { get; private set; }
+    public StreetAddress Address { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; }
+    public WebSiteAddress WebSite { get; private set; }
+    public Biography Biography { get; private set; }
     public TypeProfile Role { get; private set; }
 
     public string FullName => Name.FullName;
@@ -53,4 +53,16 @@ public class Profile
     public string PhoneNumberValue => PhoneNumber.Number;
     public string WebSiteUrl => WebSite.Url;
     public string BiographyText => Biography.Text;
+
+    public Profile UpdateProfile(UpdateProfileCommand command)
+    {
+        Name = new PersonName(command.FirstName, command.LastName);
+        Email = new EmailAddress(command.Email);
+        Address = new StreetAddress(command.Street, command.Number, command.City, command.PostalCode, command.Country);
+        PhoneNumber = new PhoneNumber(command.PhoneNumber);
+        WebSite = new WebSiteAddress(command.WebSite);
+        Biography = new Biography(command.Biography);
+        Role = command.Role;
+        return this;
+    }
 }
