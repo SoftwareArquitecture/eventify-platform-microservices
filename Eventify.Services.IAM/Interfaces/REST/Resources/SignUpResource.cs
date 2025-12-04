@@ -1,9 +1,9 @@
 namespace Eventify.Services.IAM.Interfaces.REST.Resources;
 
 public record SignUpResource(
-    string Email,
+    string Username,
     string Password,
-    string? Username = null,
+    string? Email = null,
     string? FirstName = null,
     string? LastName = null,
     string? PhoneNumber = null,

@@ -12,7 +12,7 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json",
                  optional: true,
                  reloadOnChange: true)
-    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("ocelot.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json",
                  optional: true,
                  reloadOnChange: true)
@@ -53,6 +53,10 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+var environment = builder.Environment.EnvironmentName;
+logger.LogInformation("Ocelot configuration loaded: ocelot.{Environment}.json", environment);
 
 app.UseCors("AllowAll");
 app.UseAuthentication();

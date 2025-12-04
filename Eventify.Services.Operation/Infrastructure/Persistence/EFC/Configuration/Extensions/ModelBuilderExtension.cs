@@ -15,9 +15,6 @@ public static class ModelBuilderExtension
         builder.Entity<Review>().Property(r => r.Reviewer).IsRequired();
         builder.Entity<Review>().Property(r => r.EventName).IsRequired();
         builder.Entity<Review>().Property(r => r.EventDate).IsRequired().HasColumnType("datetime");
-        /*builder.Entity<Review>().Property(r => r.ProfileId).HasConversion(p => p.ProfileIdentifier, v => new ProfileId(v));
-        builder.Entity<Review>().Property(r => r.SocialEventId)
-            .HasConversion(s => s.SocialEventIdentifier, s => new SocialEventId(s));
-        */
+        builder.Entity<Review>().Property(r => r.ReviewDate).IsRequired().HasColumnType("datetime");
     }
 }

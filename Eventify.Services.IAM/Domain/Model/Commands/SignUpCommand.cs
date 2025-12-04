@@ -9,9 +9,9 @@ namespace Eventify.Services.IAM.Domain.Model.Commands;
  * </remarks>
  */
 public record SignUpCommand(
-    string Email,
+    string Username,
     string Password,
-    string? Username = null,
+    string? Email = null,
     string? FirstName = null,
     string? LastName = null,
     string? PhoneNumber = null,

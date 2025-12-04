@@ -8,9 +8,9 @@ public static class SignUpCommandFromResourceAssembler
     public static SignUpCommand ToCommandFromResource(SignUpResource resource)
     {
         return new SignUpCommand(
-            resource.Email,
-            resource.Password,
             resource.Username,
+            resource.Password,
+            resource.Email,
             resource.FirstName,
             resource.LastName,
             resource.PhoneNumber,

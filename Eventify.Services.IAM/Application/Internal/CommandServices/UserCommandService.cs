@@ -52,20 +52,14 @@ public class UserCommandService(
      */
     public async Task Handle(SignUpCommand command)
     {
-        // Generate username from email if not provided
-        var username = command.Username ?? command.Email.Split('@')[0];
-
-        // Check if username exists and add suffix if needed
-        var finalUsername = username;
-        var counter = 1;
-        while (userRepository.ExistsByUsername(finalUsername))
+        // Check if username exists
+        if (userRepository.ExistsByUsername(command.Username))
         {
-            finalUsername = $"{username}{counter}";
-            counter++;
+            throw new Exception($"Username '{command.Username}' already exists");
         }
 
         var hashedPassword = hashingService.HashPassword(command.Password);
-        var user = new User(finalUsername, hashedPassword);
+        var user = new User(command.Username, hashedPassword);
         try
         {
             await userRepository.AddAsync(user);
@@ -76,7 +70,7 @@ public class UserCommandService(
                 user.Id,
                 command.FirstName ?? string.Empty,
                 command.LastName ?? string.Empty,
-                command.Email,
+                command.Email ?? string.Empty,
                 command.Street ?? string.Empty,
                 command.Number ?? string.Empty,
                 command.City ?? string.Empty,

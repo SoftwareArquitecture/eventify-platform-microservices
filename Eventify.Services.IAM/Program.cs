@@ -15,6 +15,7 @@ using Eventify.Services.IAM.Interfaces.ACL.Services;
 using Eventify.Shared.Domain.Repositories;
 using Eventify.Shared.Infrastructure.Persistence.EFC.Configuration;
 using Eventify.Shared.Infrastructure.Persistence.EFC.Repositories;
+using Eventify.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -36,7 +37,10 @@ builder.Services.AddScoped<AppDbContext>(sp =>
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new KebabCaseRouteNamingConvention());
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
@@ -69,13 +73,12 @@ builder.Services.AddHttpClient<IProfilesContextFacade, ProfilesContextFacade>();
 
 var app = builder.Build();
 
-// Database is already created in Aiven, no need to EnsureCreated
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//     var context = services.GetRequiredService<IamDbContext>();
-//     context.Database.EnsureCreated();
-// }
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<IamDbContext>();
+    context.Database.EnsureCreated();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

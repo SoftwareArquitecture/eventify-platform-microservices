@@ -1,119 +1,30 @@
-version: '3.8'
-
 services:
-  # --- Base de Datos Compartida ---
+  
   mysql-dev:
     image: mysql:8.0
     container_name: eventify-mysql-dev
     restart: unless-stopped
+
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+
     ports:
       - "3306:3306"
+
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - eventify-network
-    # Healthcheck: Los servicios esperarán a que esto diga "healthy" para iniciar
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # --- Microservicios ---
-  iam-service:
-    build:
-      context: .
-      dockerfile: Eventify.Services.IAM/Dockerfile
-      args:
-        SERVICE_NAME: Eventify.Services.IAM
-    container_name: iam-service
-    depends_on:
-      mysql-dev:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=eventify-mysql-dev;port=3306;database=${DB_IAM};user=${MYSQL_USER};password=${MYSQL_PASSWORD};
-      - TokenSettings__Secret=${JWT_SECRET}
-      - TokenSettings__Issuer=${JWT_ISSUER}
-      - TokenSettings__Audience=${JWT_AUDIENCE}
-    networks:
-      - eventify-network
-
-  planning-service:
-    build:
-      context: .
-      dockerfile: Eventify.Services.Planning/Dockerfile
-      args:
-        SERVICE_NAME: Eventify.Services.Planning
-    container_name: planning-service
-    depends_on:
-      mysql-dev:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=eventify-mysql-dev;port=3306;database=${DB_PLANNING};user=${MYSQL_USER};password=${MYSQL_PASSWORD};
-      - TokenSettings__Secret=${JWT_SECRET} # Necesario si este servicio valida tokens
-    networks:
-      - eventify-network
-
-  profiles-service:
-    build:
-      context: .
-      dockerfile: Eventify.Services.Profiles/Dockerfile
-      args:
-        SERVICE_NAME: Eventify.Services.Profiles
-    container_name: profiles-service
-    depends_on:
-      mysql-dev:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=eventify-mysql-dev;port=3306;database=${DB_PROFILES};user=${MYSQL_USER};password=${MYSQL_PASSWORD};
-    networks:
-      - eventify-network
-
-  operation-service:
-    build:
-      context: .
-      dockerfile: Eventify.Services.Operation/Dockerfile
-      args:
-        SERVICE_NAME: Eventify.Services.Operation
-    container_name: operation-service
-    depends_on:
-      mysql-dev:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=eventify-mysql-dev;port=3306;database=${DB_OPERATION};user=${MYSQL_USER};password=${MYSQL_PASSWORD};
-    networks:
-      - eventify-network
-
-  # --- API Gateway (El único expuesto al mundo) ---
-  api-gateway:
-    build:
-      context: .
-      dockerfile: Eventify.Platform.API/Dockerfile
-    container_name: eventify-gateway
-    depends_on:
-      - iam-service
-      - planning-service
-      - profiles-service
-      - operation-service
-    ports:
-      - "5000:8080" # Puerto Host 5000 -> Puerto Contenedor 8080
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - TokenSettings__Secret=${JWT_SECRET}
-      - TokenSettings__Issuer=${JWT_ISSUER}
-      - TokenSettings__Audience=${JWT_AUDIENCE}
-    networks:
-      - eventify-network
 
 volumes:
   mysql_data:
