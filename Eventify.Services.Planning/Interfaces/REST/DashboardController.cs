@@ -9,7 +9,7 @@ namespace Eventify.Services.Planning.Interfaces.REST;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Dashboard statistics endpoints")]
+[SwaggerTag("Dashboard statistics and activity endpoints for event organizers")]
 public class DashboardController : ControllerBase
 {
     private readonly ITaskRepository _taskRepository;
