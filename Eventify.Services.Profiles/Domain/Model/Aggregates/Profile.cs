@@ -38,14 +38,14 @@ public class Profile
     }
 
     public int Id { get; }
-    public int UserId { get; private set; }
-    public PersonName Name { get; private set; }
-    public EmailAddress Email { get; private set; }
-    public StreetAddress Address { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; }
-    public WebSiteAddress WebSite { get; private set; }
-    public Biography Biography { get; private set; }
-    public TypeProfile Role { get; private set; }
+    public int UserId { get; set; }
+    public PersonName Name { get; set; }
+    public EmailAddress Email { get; set; }
+    public StreetAddress Address { get; set; }
+    public PhoneNumber PhoneNumber { get; set; }
+    public WebSiteAddress WebSite { get; set; }
+    public Biography Biography { get; set; }
+    public TypeProfile Role { get; set; }
 
     public string FullName => Name.FullName;
     public string EmailAddress => Email.Address;
