@@ -16,6 +16,7 @@ using Eventify.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+// Planning Service - Handles social events, quotes, tasks, and dashboard
 var builder = WebApplication.CreateBuilder(args);
 
 // Database Configuration

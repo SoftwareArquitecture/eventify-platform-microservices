@@ -4,6 +4,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Text;
 
+// API Gateway - Routes requests to microservices
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
