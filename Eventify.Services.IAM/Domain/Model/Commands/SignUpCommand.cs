@@ -5,21 +5,17 @@ namespace Eventify.Services.IAM.Domain.Model.Commands;
  *     The sign up command
  * </summary>
  * <remarks>
- *     This command object includes user credentials and optional profile information
+ *     This command object includes user credentials and required profile information
  * </remarks>
  */
 public record SignUpCommand(
     string Username,
     string Password,
-    string? Email = null,
-    string? FirstName = null,
-    string? LastName = null,
-    string? PhoneNumber = null,
-    string? Role = null,
-    string? Street = null,
-    string? Number = null,
-    string? City = null,
-    string? PostalCode = null,
-    string? Country = null,
-    string? WebSite = null,
-    string? Biography = null);
+    string Email,
+    string FirstName,
+    string LastName,
+    string PhoneNumber,
+    string Street,
+    string City,
+    string Country,
+    string? Role = null);

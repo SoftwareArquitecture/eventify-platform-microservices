@@ -8,7 +8,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Eventify.Services.IAM.Interfaces.REST;
 
-[Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -23,7 +22,6 @@ public class AuthenticationController(IUserCommandService userCommandService) : 
      * <returns>The authenticated user resource, including a JWT token</returns>
      */
     [HttpPost("sign-in")]
-    [AllowAnonymous]
     [SwaggerOperation(
         Summary = "Sign in",
         Description = "Sign in a user",
@@ -55,7 +53,6 @@ public class AuthenticationController(IUserCommandService userCommandService) : 
      * <returns>A confirmation message on successful creation.</returns>
      */
     [HttpPost("sign-up")]
-    [AllowAnonymous]
     [SwaggerOperation(
         Summary = "Sign-up",
         Description = "Sign up a new user",

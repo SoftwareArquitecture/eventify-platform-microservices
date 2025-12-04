@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using Eventify.Services.IAM.Domain.Model.Commands;
 using Eventify.Services.IAM.Domain.Model.Queries;
 using Eventify.Services.IAM.Domain.Services;
 using Eventify.Services.IAM.Infrastructure.Pipeline.Middleware.Attributes;
@@ -17,12 +18,11 @@ namespace Eventify.Services.IAM.Interfaces.REST;
  *     This class is used to handle user requests
  * </remarks>
  */
-[Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available User endpoints")]
-public class UsersController(IUserQueryService userQueryService) : ControllerBase
+public class UsersController(IUserQueryService userQueryService, IUserCommandService userCommandService) : ControllerBase
 {
     /**
      * <summary>
@@ -63,5 +63,26 @@ public class UsersController(IUserQueryService userQueryService) : ControllerBas
         var users = await userQueryService.Handle(getAllUsersQuery);
         var userResources = users.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(userResources);
+    }
+
+    /**
+     * <summary>
+     *     Delete user by id endpoint. It allows to delete a user by id
+     * </summary>
+     * <param name="id">The user id</param>
+     * <returns>No content</returns>
+     */
+    [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Delete a user by its id",
+        Description = "Delete a user and its associated profile by its id",
+        OperationId = "DeleteUser")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "The user was deleted")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The user was not found")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        var deleteUserCommand = new DeleteUserCommand(id);
+        await userCommandService.Handle(deleteUserCommand);
+        return NoContent();
     }
 }

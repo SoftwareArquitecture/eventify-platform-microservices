@@ -65,25 +65,56 @@ public class UserCommandService(
             await userRepository.AddAsync(user);
             await unitOfWork.CompleteAsync();
 
-            // Create profile in Profiles service with default values
+            // Create profile in Profiles service
             await profilesContextFacade.CreateProfile(
                 user.Id,
-                command.FirstName ?? string.Empty,
-                command.LastName ?? string.Empty,
-                command.Email ?? string.Empty,
-                command.Street ?? string.Empty,
-                command.Number ?? string.Empty,
-                command.City ?? string.Empty,
-                command.PostalCode ?? string.Empty,
-                command.Country ?? string.Empty,
-                command.PhoneNumber ?? string.Empty,
-                command.WebSite ?? string.Empty,
-                command.Biography ?? string.Empty,
+                command.FirstName,
+                command.LastName,
+                command.Email,
+                command.Street,
+                string.Empty, // Number - not required
+                command.City,
+                string.Empty, // PostalCode - not required
+                command.Country,
+                command.PhoneNumber,
+                string.Empty, // WebSite - not required
+                string.Empty, // Biography - not required
                 command.Role ?? "User");
         }
         catch (Exception e)
         {
             throw new Exception($"An error occurred while creating user: {e.Message}");
+        }
+    }
+
+    /**
+     * <summary>
+     *     Handle delete user command
+     * </summary>
+     * <param name="command">The delete user command</param>
+     * <returns>A task representing the asynchronous operation</returns>
+     */
+    public async Task Handle(DeleteUserCommand command)
+    {
+        var user = await userRepository.FindByIdAsync(command.UserId);
+
+        if (user == null)
+        {
+            throw new Exception($"User with id '{command.UserId}' not found");
+        }
+
+        try
+        {
+            // First, delete the profile in Profiles service
+            await profilesContextFacade.DeleteProfileByUserId(user.Id);
+
+            // Then, delete the user in IAM service
+            userRepository.Remove(user);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"An error occurred while deleting user: {e.Message}");
         }
     }
 }

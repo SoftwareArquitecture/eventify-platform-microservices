@@ -24,4 +24,6 @@ public interface IProfilesContextFacade
         string webSite,
         string biography,
         string role);
+
+    Task DeleteProfileByUserId(int userId);
 }

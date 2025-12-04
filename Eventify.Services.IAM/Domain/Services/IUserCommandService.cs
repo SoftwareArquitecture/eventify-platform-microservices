@@ -30,4 +30,13 @@ public interface IUserCommandService
      * <returns>A confirmation message on successful creation.</returns>
      */
     Task Handle(SignUpCommand command);
+
+    /**
+     * <summary>
+     *     Handle delete user command
+     * </summary>
+     * <param name="command">The delete user command</param>
+     * <returns>A task representing the asynchronous operation</returns>
+     */
+    Task Handle(DeleteUserCommand command);
 }

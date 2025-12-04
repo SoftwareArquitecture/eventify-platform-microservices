@@ -43,4 +43,23 @@ public class ProfileCommandService(
             return null;
         }
     }
+
+    public async Task Handle(DeleteProfileCommand command)
+    {
+        var profile = await profileRepository.FindByIdAsync(command.ProfileId);
+        if (profile == null)
+        {
+            throw new Exception($"Profile with id '{command.ProfileId}' not found");
+        }
+
+        try
+        {
+            profileRepository.Remove(profile);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"An error occurred while deleting profile: {e.Message}");
+        }
+    }
 }

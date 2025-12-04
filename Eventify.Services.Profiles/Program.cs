@@ -39,6 +39,10 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(new KebabCaseRouteNamingConvention());
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
 });
 builder.Services.AddEndpointsApiExplorer();
 

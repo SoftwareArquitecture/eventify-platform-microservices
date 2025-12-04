@@ -75,4 +75,17 @@ public class ProfilesContextFacade : IProfilesContextFacade
 
         throw new Exception("Failed to extract profile ID from response");
     }
+
+    public async Task DeleteProfileByUserId(int userId)
+    {
+        var profilesServiceUrl = _configuration["ProfilesServiceUrl"] ?? "http://profiles-service:8080";
+
+        var response = await _httpClient.DeleteAsync($"{profilesServiceUrl}/api/v1/profiles/user/{userId}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to delete profile: {response.StatusCode} - {errorContent}");
+        }
+    }
 }

@@ -14,13 +14,9 @@ public static class SignUpCommandFromResourceAssembler
             resource.FirstName,
             resource.LastName,
             resource.PhoneNumber,
-            resource.Role,
             resource.Street,
-            resource.Number,
             resource.City,
-            resource.PostalCode,
             resource.Country,
-            resource.WebSite,
-            resource.Biography);
+            resource.Role);
     }
 }

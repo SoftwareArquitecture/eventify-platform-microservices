@@ -31,37 +31,37 @@ public static class ModelBuilderExtensions
         builder.Entity<Profile>().OwnsOne(p => p.Name, n =>
         {
             n.WithOwner().HasForeignKey("Id");
-            n.Property(n => n.FirstName).HasColumnName("FirstName");
-            n.Property(n => n.LastName).HasColumnName("LastName");
+            n.Property(n => n.FirstName).HasColumnName("FirstName").IsRequired(false);
+            n.Property(n => n.LastName).HasColumnName("LastName").IsRequired(false);
         });
         builder.Entity<Profile>().OwnsOne(p => p.Email, e =>
         {
             e.WithOwner().HasForeignKey("Id");
-            e.Property(e => e.Address).HasColumnName("EmailAddress");
+            e.Property(e => e.Address).HasColumnName("EmailAddress").IsRequired(false);
         });
         builder.Entity<Profile>().OwnsOne(p => p.Address, a =>
         {
             a.WithOwner().HasForeignKey("Id");
-            a.Property(a => a.Street).HasColumnName("AddressStreet");
-            a.Property(a => a.Number).HasColumnName("AddressNumber");
-            a.Property(a => a.City).HasColumnName("AddressCity");
-            a.Property(a => a.PostalCode).HasColumnName("AddressPostalCode");
-            a.Property(a => a.Country).HasColumnName("AddressCountry");
+            a.Property(a => a.Street).HasColumnName("AddressStreet").IsRequired(false);
+            a.Property(a => a.Number).HasColumnName("AddressNumber").IsRequired(false);
+            a.Property(a => a.City).HasColumnName("AddressCity").IsRequired(false);
+            a.Property(a => a.PostalCode).HasColumnName("AddressPostalCode").IsRequired(false);
+            a.Property(a => a.Country).HasColumnName("AddressCountry").IsRequired(false);
         });
         builder.Entity<Profile>().OwnsOne(p => p.PhoneNumber, pn =>
         {
             pn.WithOwner().HasForeignKey("Id");
-            pn.Property(pn => pn.Number).HasColumnName("PhoneNumber");
+            pn.Property(pn => pn.Number).HasColumnName("PhoneNumber").IsRequired(false);
         });
         builder.Entity<Profile>().OwnsOne(p => p.WebSite, w =>
         {
             w.WithOwner().HasForeignKey("Id");
-            w.Property(ws => ws.Url).HasColumnName("WebSite");
+            w.Property(ws => ws.Url).HasColumnName("WebSite").IsRequired(false);
         });
         builder.Entity<Profile>().OwnsOne(p => p.Biography, b =>
         {
             b.WithOwner().HasForeignKey("Id");
-            b.Property(bi => bi.Text).HasColumnName("Biography");
+            b.Property(bi => bi.Text).HasColumnName("Biography").IsRequired(false);
         });
         var RoleConverter = new ValueConverter<TypeProfile, string>(
             t => t.ToString().ToLower(),

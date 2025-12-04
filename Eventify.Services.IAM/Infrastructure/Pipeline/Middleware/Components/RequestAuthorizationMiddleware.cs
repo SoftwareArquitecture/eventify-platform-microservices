@@ -30,8 +30,11 @@ public class RequestAuthorizationMiddleware(RequestDelegate next, ILogger<Reques
         }
 
         _logger.LogInformation("Entering authorization");
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+        _logger.LogInformation($"Authorization header: {authHeader}");
 
+        var token = authHeader?.Split(" ").Last();
+        _logger.LogInformation($"Extracted token: {token}");
 
         if (token is null) throw new AuthenticationException("Null or invalid token");
 

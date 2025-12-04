@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using Eventify.Services.Profiles.Domain.Model.Commands;
 using Eventify.Services.Profiles.Domain.Model.Queries;
 using Eventify.Services.Profiles.Domain.Model.ValueObjects;
 using Eventify.Services.Profiles.Domain.Services;
@@ -95,5 +96,31 @@ public class ProfilesController(
         if (profile is null) return NotFound();
         var profileResource = ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile);
         return Ok(profileResource);
+    }
+
+    [HttpDelete("{profileId:int}")]
+    [SwaggerOperation("Delete Profile", "Delete a profile by its unique identifier.", OperationId = "DeleteProfile")]
+    [SwaggerResponse(204, "The profile was deleted.")]
+    [SwaggerResponse(404, "The profile was not found.")]
+    public async Task<IActionResult> DeleteProfile(int profileId)
+    {
+        var deleteProfileCommand = new DeleteProfileCommand(profileId);
+        await profileCommandService.Handle(deleteProfileCommand);
+        return NoContent();
+    }
+
+    [HttpDelete("user/{userId:int}")]
+    [SwaggerOperation("Delete Profile by User Id", "Delete a profile by its user identifier.", OperationId = "DeleteProfileByUserId")]
+    [SwaggerResponse(204, "The profile was deleted.")]
+    [SwaggerResponse(404, "The profile was not found.")]
+    public async Task<IActionResult> DeleteProfileByUserId(int userId)
+    {
+        var getProfileByUserIdQuery = new GetProfileByUserIdQuery(userId);
+        var profile = await profileQueryService.Handle(getProfileByUserIdQuery);
+        if (profile is null) return NotFound();
+
+        var deleteProfileCommand = new DeleteProfileCommand(profile.Id);
+        await profileCommandService.Handle(deleteProfileCommand);
+        return NoContent();
     }
 }
